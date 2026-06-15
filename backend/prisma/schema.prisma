@@ -1,0 +1,66 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+}
+
+enum TransactionType {
+    INCOME
+    EXPENSE
+}
+
+model User {
+    id           Int            @id @default(autoincrement())
+    email        String         @unique
+    password     String
+    createdAt    DateTime       @default(now())
+    updatedAt    DateTime       @updatedAt
+    categories   Category[]
+    transactions Transaction[]
+    budgetLimits BudgetLimit[]
+}
+
+model Category {
+    id           Int            @id @default(autoincrement())
+    name         String
+    userId       Int
+    user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+    transactions Transaction[]
+    budgetLimits BudgetLimit[]
+    createdAt    DateTime       @default(now())
+    updatedAt    DateTime       @updatedAt
+
+    @@unique([name, userId])
+}
+
+model Transaction {
+    id          Int             @id @default(autoincrement())
+    amount      Float
+    currency    String          @default("PLN")
+    type        TransactionType
+    description String?
+    date        DateTime
+    userId      Int
+    user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+    categoryId  Int?
+    category    Category?       @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+    createdAt   DateTime        @default(now())
+    updatedAt   DateTime        @updatedAt
+}
+
+model BudgetLimit {
+    id         Int       @id @default(autoincrement())
+    amount     Float
+    month      Int
+    year       Int
+    userId     Int
+    user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    categoryId Int?
+    category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+
+    @@unique([userId, categoryId, month, year])
+}

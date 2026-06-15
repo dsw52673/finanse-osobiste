@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import authRouter from './routes/auth'
+import transactionsRouter from './routes/transactions'
 
 dotenv.config()
 
@@ -21,6 +22,7 @@ app.get('/health', (req, res) => {
 })
 
 app.use('/api/auth', authRouter)
+app.use('/api/transactions', transactionsRouter)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)

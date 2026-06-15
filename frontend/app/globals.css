@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: var(--color-alabaster-grey-50);
+  --foreground: var(--color-ink-black-950);
 }
 
 @theme inline {
@@ -10,12 +10,72 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-ink-black-50: #ebf2f9;
+  --color-ink-black-100: #d8e5f3;
+  --color-ink-black-200: #b1cbe7;
+  --color-ink-black-300: #8ab1db;
+  --color-ink-black-400: #6397cf;
+  --color-ink-black-500: #3c7dc3;
+  --color-ink-black-600: #30649c;
+  --color-ink-black-700: #244b75;
+  --color-ink-black-800: #18324e;
+  --color-ink-black-900: #0c1927;
+  --color-ink-black-950: #08121b;
+
+  --color-prussian-blue-50: #eef1f7;
+  --color-prussian-blue-100: #dce3ef;
+  --color-prussian-blue-200: #b9c6df;
+  --color-prussian-blue-300: #96aacf;
+  --color-prussian-blue-400: #738ebf;
+  --color-prussian-blue-500: #5071af;
+  --color-prussian-blue-600: #405b8c;
+  --color-prussian-blue-700: #304469;
+  --color-prussian-blue-800: #202d46;
+  --color-prussian-blue-900: #101723;
+  --color-prussian-blue-950: #0b1018;
+
+  --color-dusk-blue-50: #eff2f6;
+  --color-dusk-blue-100: #dee5ed;
+  --color-dusk-blue-200: #bdcbdb;
+  --color-dusk-blue-300: #9cb1c9;
+  --color-dusk-blue-400: #7b97b7;
+  --color-dusk-blue-500: #5b7da4;
+  --color-dusk-blue-600: #486484;
+  --color-dusk-blue-700: #364b63;
+  --color-dusk-blue-800: #243242;
+  --color-dusk-blue-900: #121921;
+  --color-dusk-blue-950: #0d1217;
+
+  --color-dusty-denim-50: #eff2f5;
+  --color-dusty-denim-100: #e0e5eb;
+  --color-dusty-denim-200: #c0cad8;
+  --color-dusty-denim-300: #a1b0c4;
+  --color-dusty-denim-400: #8296b0;
+  --color-dusty-denim-500: #627c9d;
+  --color-dusty-denim-600: #4f637d;
+  --color-dusty-denim-700: #3b4a5e;
+  --color-dusty-denim-800: #27313f;
+  --color-dusty-denim-900: #14191f;
+  --color-dusty-denim-950: #0e1116;
+
+  --color-alabaster-grey-50: #f3f3f1;
+  --color-alabaster-grey-100: #e6e7e4;
+  --color-alabaster-grey-200: #cecfc9;
+  --color-alabaster-grey-300: #b5b7ae;
+  --color-alabaster-grey-400: #9c9f93;
+  --color-alabaster-grey-500: #838778;
+  --color-alabaster-grey-600: #696c60;
+  --color-alabaster-grey-700: #4f5148;
+  --color-alabaster-grey-800: #353630;
+  --color-alabaster-grey-900: #1a1b18;
+  --color-alabaster-grey-950: #121311;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--color-alabaster-grey-950);
+    --foreground: var(--color-ink-black-50);
   }
 }
 

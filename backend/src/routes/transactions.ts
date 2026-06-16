@@ -23,6 +23,17 @@ const listQuerySchema = z.object({
     categoryId: z.coerce.number().int().positive().optional()
 })
 
+const importSchema = z.array(
+    z.object({
+        amount: z.number().positive(),
+        currency: z.string().length(3).default('PLN'),
+        type: z.enum(['INCOME', 'EXPENSE']),
+        description: z.string().optional(),
+        date: z.string().min(1),
+        categoryId: z.number().int().positive().nullish()
+    })
+).min(1).max(500)
+
 router.get('/', async (req: Request, res: Response) => {
     const parsed = listQuerySchema.safeParse(req.query as Record<string, string>)
 
@@ -97,6 +108,52 @@ router.post('/', async (req: Request, res: Response) => {
     })
 
     res.status(201).json(transaction)
+})
+
+router.post('/import', async (req: Request, res: Response) => {
+    const parsed = importSchema.safeParse(req.body)
+
+    if (!parsed.success) {
+        res.status(400).json({ error: parsed.error.flatten().fieldErrors })
+        return
+    }
+
+    const items = parsed.data
+
+    const categoryIds = [
+        ...new Set(
+            items.map((item) => item.categoryId).filter((id): id is number => id != null)
+        )
+    ]
+
+    if (categoryIds.length > 0) {
+        const ownedCategories = await prisma.category.findMany({
+            where: { id: { in: categoryIds }, userId: req.userId! },
+            select: { id: true }
+        })
+
+        const ownedIds = new Set(ownedCategories.map((c) => c.id))
+        const invalid = categoryIds.filter((id) => !ownedIds.has(id))
+
+        if (invalid.length > 0) {
+            res.status(400).json({ error: `Category ids not found or not owned: ${invalid.join(', ')}` })
+            return
+        }
+    }
+
+    const data = items.map((item) => ({
+        amount: item.amount,
+        currency: item.currency,
+        type: item.type,
+        description: item.description ?? null,
+        date: new Date(item.date),
+        userId: req.userId!,
+        categoryId: item.categoryId ?? null
+    }))
+
+    const result = await prisma.transaction.createMany({ data })
+
+    res.status(201).json({ count: result.count })
 })
 
 router.get('/:id', async (req: Request, res: Response) => {

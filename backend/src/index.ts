@@ -6,6 +6,7 @@ import authRouter from './routes/auth'
 import transactionsRouter from './routes/transactions'
 import categoriesRouter from './routes/categories'
 import budgetsRouter from './routes/budgets'
+import analyticsRouter from './routes/analytics'
 
 dotenv.config()
 
@@ -27,6 +28,7 @@ app.use('/api/auth', authRouter)
 app.use('/api/transactions', transactionsRouter)
 app.use('/api/categories', categoriesRouter)
 app.use('/api/budgets', budgetsRouter)
+app.use('/api/analytics', analyticsRouter)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)

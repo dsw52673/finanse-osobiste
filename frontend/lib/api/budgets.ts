@@ -18,7 +18,7 @@ export async function setOverallBudget(input: SetBudgetInput): Promise<BudgetLim
             },
             body: JSON.stringify(input),
         }),
-        'Empty response from set overall budget endpoint',
+        'Serwer nie zwrócił danych podczas ustawiania budżetu ogólnego',
     )
 }
 
@@ -31,7 +31,7 @@ export async function setCategoryBudget(categoryId: number, input: SetBudgetInpu
             },
             body: JSON.stringify(input),
         }),
-        'Empty response from set category budget endpoint',
+        'Serwer nie zwrócił danych podczas ustawiania budżetu kategorii',
     )
 }
 
@@ -44,6 +44,6 @@ export async function deleteCategoryBudget(categoryId: number): Promise<void> {
 export async function getBudgetStatus(): Promise<BudgetStatusResponse> {
     return requireResult(
         await apiRequest<BudgetStatusResponse>('/api/budgets/status'),
-        'Empty response from get budget status endpoint',
+        'Serwer nie zwrócił danych podczas pobierania statusu budżetu',
     )
 }

@@ -46,14 +46,14 @@ function buildQueryString(params?: TransactionListParams): string {
 export async function listTransactions(params?: TransactionListParams): Promise<Transaction[]> {
     return requireResult(
         await apiRequest<Transaction[]>(`/api/transactions${buildQueryString(params)}`),
-        'Empty response from list transactions endpoint',
+        'Serwer nie zwrócił danych podczas pobierania transakcji',
     )
 }
 
 export async function getTransaction(id: number): Promise<Transaction> {
     return requireResult(
         await apiRequest<Transaction>(`/api/transactions/${id}`),
-        'Empty response from get transaction endpoint',
+        'Serwer nie zwrócił danych podczas pobierania szczegółów transakcji',
     )
 }
 
@@ -66,7 +66,7 @@ export async function createTransaction(input: CreateTransactionInput): Promise<
             },
             body: JSON.stringify(input),
         }),
-        'Empty response from create transaction endpoint',
+        'Serwer nie zwrócił danych podczas tworzenia transakcji',
     )
 }
 
@@ -79,7 +79,7 @@ export async function updateTransaction(id: number, input: UpdateTransactionInpu
             },
             body: JSON.stringify(input),
         }),
-        'Empty response from update transaction endpoint',
+        'Serwer nie zwrócił danych podczas aktualizacji transakcji',
     )
 }
 
@@ -98,6 +98,6 @@ export async function importTransactions(items: CreateTransactionInput[]): Promi
             },
             body: JSON.stringify(items),
         }),
-        'Empty response from import transactions endpoint',
+        'Serwer nie zwrócił danych podczas importu transakcji',
     )
 }

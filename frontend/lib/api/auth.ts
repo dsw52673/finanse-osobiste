@@ -11,7 +11,7 @@ export async function register(input: RegisterInput): Promise<RegisteredUser> {
     })
 
     if (!user) {
-        throw new Error('Empty response from register endpoint')
+        throw new Error('Serwer nie zwrócił danych podczas rejestracji')
     }
 
     return user

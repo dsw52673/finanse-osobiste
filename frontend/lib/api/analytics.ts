@@ -65,7 +65,7 @@ export async function getAnalyticsByCategory(
         await apiRequest<AnalyticsByCategoryResponse>(
             `/api/analytics/by-category${buildByCategoryQueryString(params)}`,
         ),
-        'Empty response from analytics by category endpoint',
+        'Serwer nie zwrócił danych podczas pobierania analityki według kategorii',
     )
 }
 
@@ -76,6 +76,6 @@ export async function getAnalyticsByPeriod(
         await apiRequest<AnalyticsByPeriodResponse>(
             `/api/analytics/by-period${buildByPeriodQueryString(params)}`,
         ),
-        'Empty response from analytics by period endpoint',
+        'Serwer nie zwrócił danych podczas pobierania analityki według okresu',
     )
 }

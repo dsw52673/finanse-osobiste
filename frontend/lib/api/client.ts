@@ -5,7 +5,7 @@ function getApiUrl(): string {
     const apiUrl = process.env.API_URL
 
     if (!apiUrl) {
-        throw new Error('API_URL environment variable is not set')
+        throw new Error('Nie skonfigurowano adresu API')
     }
 
     return apiUrl.replace(/\/+$/, '')
@@ -53,7 +53,7 @@ export async function apiRequest<T>(path: string, options: ApiRequestOptions = {
 
     if (!response.ok) {
         let data: ApiErrorResponse | undefined
-        let message = `Request failed with status ${response.status}`
+        let message = `Żądanie zakończyło się błędem: ${response.status}`
 
         try {
             const json = await response.json() as unknown
@@ -61,7 +61,7 @@ export async function apiRequest<T>(path: string, options: ApiRequestOptions = {
             if (json && typeof json === 'object' && 'error' in json) {
                 data = json as ApiErrorResponse
                 const error = data.error
-                message = typeof error === 'string' ? error : 'Validation failed'
+                message = typeof error === 'string' ? error : 'Błąd walidacji danych'
             }
         } catch {
         }

@@ -12,7 +12,7 @@ function requireResult<T>(result: T | undefined, message: string): T {
 export async function listCategories(): Promise<Category[]> {
     return requireResult(
         await apiRequest<Category[]>('/api/categories'),
-        'Empty response from list categories endpoint',
+        'Serwer nie zwrócił danych podczas pobierania kategorii',
     )
 }
 
@@ -25,7 +25,7 @@ export async function createCategory(input: CreateCategoryInput): Promise<Catego
             },
             body: JSON.stringify(input),
         }),
-        'Empty response from create category endpoint',
+        'Serwer nie zwrócił danych podczas tworzenia kategorii',
     )
 }
 
@@ -38,7 +38,7 @@ export async function updateCategory(id: number, input: UpdateCategoryInput): Pr
             },
             body: JSON.stringify(input),
         }),
-        'Empty response from update category endpoint',
+        'Serwer nie zwrócił danych podczas aktualizacji kategorii',
     )
 }
 

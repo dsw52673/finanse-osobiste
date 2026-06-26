@@ -22,6 +22,8 @@ type TransactionRowEditProps = {
     categories: Category[]
     onSave: () => void
     onCancel: () => void
+    isSelected?: boolean
+    onToggleSelect?: () => void
 }
 
 export default function TransactionRowEdit({
@@ -39,7 +41,9 @@ export default function TransactionRowEdit({
     isPending,
     categories,
     onSave,
-    onCancel
+    onCancel,
+    isSelected,
+    onToggleSelect
 }: TransactionRowEditProps) {
     const typeOptions = [
         { value: 'INCOME', label: 'Wpływ' },
@@ -53,6 +57,14 @@ export default function TransactionRowEdit({
 
     return (
         <tr className="border-b border-[#202E4C]/25 bg-[#0B0F19]/40">
+            <td className="p-3">
+                <input 
+                    type="checkbox" 
+                    checked={isSelected} 
+                    onChange={onToggleSelect} 
+                    className="appearance-none w-[18px] h-[18px] border-2 border-[#202E4C] rounded-md bg-[#161D30]/50 hover:bg-[#161D30] hover:border-[#A3C5FF]/50 checked:bg-[#A3C5FF] checked:border-[#A3C5FF] transition-all cursor-pointer relative flex items-center justify-center before:content-[''] before:absolute before:inset-0 before:bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%230B0F19%22%20stroke-width%3D%223.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%2220%206%209%2017%204%2012%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] before:bg-no-repeat before:bg-center before:bg-[length:10px_10px] before:opacity-0 checked:before:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+            </td>
             <td className="p-3 min-w-[120px]">
                 <CustomSelect
                     value={type}

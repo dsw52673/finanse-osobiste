@@ -1,21 +1,22 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { Landmark, LayoutDashboard, User, ArrowLeftRight, Tags, LogOut, Plus, Menu, X } from 'lucide-react'
+import { Landmark, LogOut, Plus, Menu, X } from 'lucide-react'
+import SidebarNavigation from './sidebar-navigation'
 import { logoutAction } from '@/app/actions/logout'
-import type { Category } from '@/lib/api/types'
+import type { Category, BudgetStatusResponse } from '@/lib/api/types'
 import TransactionModal from './transaction-modal'
+import SidebarAlerts from './sidebar-alerts'
 
 type SidebarProps = {
     availableFunds: number
     monthlyExpenses: number
     categories: Category[]
+    budgetStatus: BudgetStatusResponse
 }
 
-export default function Sidebar({ availableFunds, monthlyExpenses, categories }: SidebarProps) {
-    const pathname = usePathname()
+export default function Sidebar({ availableFunds, monthlyExpenses, categories, budgetStatus }: SidebarProps) {
     const router = useRouter()
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -25,35 +26,6 @@ export default function Sidebar({ availableFunds, monthlyExpenses, categories }:
         if (result.success) {
             router.replace('/login')
         }
-    }
-
-    const navigationItems = [
-        { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-        { name: 'Profil', href: '/profile', icon: User },
-        { name: 'Transakcje', href: '/transactions', icon: ArrowLeftRight },
-        { name: 'Kategorie', href: '/categories', icon: Tags },
-    ]
-
-    function renderNavLinks(onItemClick?: () => void) {
-        return navigationItems.map((item) => {
-            const Icon = item.icon
-            const isActive = pathname === item.href
-            return (
-                <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={onItemClick}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-sm font-medium cursor-pointer ${
-                        isActive
-                            ? 'bg-[#242F4D] text-[#E2E8F0] border-l-4 border-[#A3C5FF]'
-                            : 'text-[#94A3B8] hover:bg-[#1E293B] hover:text-[#E2E8F0]'
-                    }`}
-                >
-                    <Icon className="h-5 w-5" />
-                    {item.name}
-                </Link>
-            )
-        })
     }
 
     return (
@@ -84,8 +56,9 @@ export default function Sidebar({ availableFunds, monthlyExpenses, categories }:
                             <Landmark className="h-6 w-6 text-[#A3C5FF]" />
                             <span className="font-bold text-white text-lg">Budżet osobisty</span>
                         </div>
-                        <nav className="flex flex-col gap-1.5 flex-1">{renderNavLinks(() => setIsMenuOpen(false))}</nav>
+                        <SidebarNavigation onItemClick={() => setIsMenuOpen(false)} />
                         <div className="mt-auto space-y-4">
+                            <SidebarAlerts budgetStatus={budgetStatus} />
                             <button
                                 onClick={() => {
                                     setIsMenuOpen(false)
@@ -123,8 +96,9 @@ export default function Sidebar({ availableFunds, monthlyExpenses, categories }:
                     <Landmark className="h-6 w-6 text-[#A3C5FF]" />
                     <span className="font-bold text-white text-lg">Budżet osobisty</span>
                 </div>
-                <nav className="flex flex-col gap-1.5 flex-1">{renderNavLinks()}</nav>
+                <SidebarNavigation />
                 <div className="mt-auto space-y-4">
+                    <SidebarAlerts budgetStatus={budgetStatus} />
                     <button
                         onClick={() => setIsModalOpen(true)}
                         className="w-full flex items-center justify-center gap-2 bg-[#A3C5FF] text-[#0B0F19] font-semibold py-3 px-4 rounded-xl hover:bg-[#82AFFF] transition-colors cursor-pointer"

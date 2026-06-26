@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Pencil, Trash2, Check, X, ArrowUpRight, ArrowDownLeft } from 'lucide-react'
 import type { Transaction, Category } from '@/lib/api/types'
 import { updateTransactionAction, deleteTransactionAction } from '@/app/actions/transactions'
+import { getCleanCategoryName } from '@/lib/category-helpers'
 import TransactionRowEdit from './transaction-row-edit'
 
 type TransactionRowProps = {
@@ -25,7 +26,7 @@ export default function TransactionRow({ transaction, categories }: TransactionR
     const [date, setDate] = useState(() => new Date(transaction.date).toISOString().split('T')[0])
     const [error, setError] = useState<string | null>(null)
 
-    function handleCancelEdit() {
+    const handleCancelEdit = () => {
         setAmount(String(transaction.amount))
         setType(transaction.type)
         setCategoryId(transaction.categoryId ? String(transaction.categoryId) : '')
@@ -46,8 +47,8 @@ export default function TransactionRow({ transaction, categories }: TransactionR
 
         let selectedCatId = categoryId ? parseInt(categoryId) : null
         if (!selectedCatId) {
-            const other = categories.find(c => c.name === 'Inne')
-            if (other) selectedCatId = other.id
+            const defaultName = type === 'INCOME' ? 'Wynagrodzenie' : 'Inne'
+            selectedCatId = categories.find(c => c.name === defaultName)?.id || null
         }
 
         startTransition(async () => {
@@ -68,20 +69,18 @@ export default function TransactionRow({ transaction, categories }: TransactionR
         })
     }
 
-    function handleDelete() {
+    const handleDelete = () => {
         startTransition(async () => {
             const res = await deleteTransactionAction(transaction.id)
             if (res.success) {
                 setIsDeleting(false)
                 router.refresh()
-            } else {
-                alert(res.message)
-            }
+            } else alert(res.message)
         })
     }
 
     const isIncome = transaction.type === 'INCOME'
-    const categoryName = transaction.category?.name ?? 'Bez kategorii'
+    const categoryName = transaction.category?.name ? getCleanCategoryName(transaction.category.name) : 'Bez kategorii'
     const formattedDate = new Date(transaction.date).toLocaleDateString('pl-PL')
 
     if (isEditing) {
@@ -132,39 +131,13 @@ export default function TransactionRow({ transaction, categories }: TransactionR
                 <div className="flex items-center justify-end gap-2">
                     {isDeleting ? (
                         <>
-                            <button
-                                type="button"
-                                disabled={isPending}
-                                onClick={handleDelete}
-                                className="p-1.5 bg-green-500/10 text-green-400 border border-green-500/25 hover:bg-green-500/20 rounded-lg transition-all cursor-pointer"
-                            >
-                                <Check className="h-3.5 w-3.5" />
-                            </button>
-                            <button
-                                type="button"
-                                disabled={isPending}
-                                onClick={() => setIsDeleting(false)}
-                                className="p-1.5 bg-red-500/10 text-red-400 border border-red-500/25 hover:bg-red-500/20 rounded-lg transition-all cursor-pointer"
-                            >
-                                <X className="h-3.5 w-3.5" />
-                            </button>
+                            <button type="button" disabled={isPending} onClick={handleDelete} className="p-1.5 bg-green-500/10 text-green-400 border border-green-500/25 hover:bg-green-500/20 rounded-lg cursor-pointer"><Check className="h-3.5 w-3.5" /></button>
+                            <button type="button" disabled={isPending} onClick={() => setIsDeleting(false)} className="p-1.5 bg-red-500/10 text-red-400 border border-red-500/25 hover:bg-red-500/20 rounded-lg cursor-pointer"><X className="h-3.5 w-3.5" /></button>
                         </>
                     ) : (
                         <>
-                            <button
-                                type="button"
-                                onClick={() => setIsEditing(true)}
-                                className="p-1.5 bg-green-500/10 text-green-400 border border-green-500/25 hover:bg-green-500/20 rounded-lg transition-all cursor-pointer"
-                            >
-                                <Pencil className="h-3.5 w-3.5" />
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setIsDeleting(true)}
-                                className="p-1.5 bg-red-500/10 text-red-400 border border-red-500/25 hover:bg-red-500/20 rounded-lg transition-all cursor-pointer"
-                            >
-                                <Trash2 className="h-3.5 w-3.5" />
-                            </button>
+                            <button type="button" onClick={() => setIsEditing(true)} className="p-1.5 bg-green-500/10 text-green-400 border border-green-500/25 hover:bg-green-500/20 rounded-lg cursor-pointer"><Pencil className="h-3.5 w-3.5" /></button>
+                            <button type="button" onClick={() => setIsDeleting(true)} className="p-1.5 bg-red-500/10 text-red-400 border border-red-500/25 hover:bg-red-500/20 rounded-lg cursor-pointer"><Trash2 className="h-3.5 w-3.5" /></button>
                         </>
                     )}
                 </div>

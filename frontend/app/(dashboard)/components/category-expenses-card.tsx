@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts'
 import type { AnalyticsByCategoryResponse } from '@/lib/api/types'
+import { getCleanCategoryName } from '@/lib/category-helpers'
 
 type CategoryExpensesCardProps = {
     analytics: AnalyticsByCategoryResponse
@@ -18,6 +19,11 @@ export default function CategoryExpensesCard({ analytics }: CategoryExpensesCard
     }, [])
 
     const hasData = analytics.data && analytics.data.length > 0 && analytics.totalExpenses > 0
+
+    const cleanedData = (analytics.data || []).map((item) => ({
+        ...item,
+        name: getCleanCategoryName(item.name)
+    }))
 
     return (
         <div className="bg-[#161D30] border border-[#202E4C]/50 rounded-3xl p-6 flex flex-col justify-between h-full min-h-[380px]">
@@ -36,7 +42,7 @@ export default function CategoryExpensesCard({ analytics }: CategoryExpensesCard
                             <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
                                     <Pie
-                                        data={analytics.data}
+                                        data={cleanedData}
                                         cx="50%"
                                         cy="50%"
                                         innerRadius={60}
@@ -44,7 +50,7 @@ export default function CategoryExpensesCard({ analytics }: CategoryExpensesCard
                                         paddingAngle={4}
                                         dataKey="value"
                                     >
-                                        {analytics.data.map((_, index) => (
+                                        {cleanedData.map((_, index) => (
                                             <Cell
                                                 key={`cell-${index}`}
                                                 fill={COLORS[index % COLORS.length]}

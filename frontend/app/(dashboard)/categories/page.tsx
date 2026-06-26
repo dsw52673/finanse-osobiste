@@ -1,10 +1,23 @@
-export default function CategoriesPage() {
+import { getCategoriesData, getBudgetStatusData, getAnalyticsByCategoryData } from '@/lib/queries/finance'
+import CategoryList from './components/category-list'
+
+export default async function CategoriesPage() {
+    const [categories, budgetStatus, analytics] = await Promise.all([
+        getCategoriesData(),
+        getBudgetStatusData(),
+        getAnalyticsByCategoryData()
+    ])
+
     return (
-        <div className="bg-[#161D30] border border-[#202E4C]/50 rounded-3xl p-8 max-w-2xl">
-            <h2 className="text-xl font-bold text-white mb-4">Zarządzanie Kategoriami</h2>
-            <p className="text-sm text-[#94A3B8] leading-relaxed">
-                Widok zarządzania kategoriami wydatków i przychodów. Ta funkcjonalność zostanie zaimplementowana w kolejnym etapie.
-            </p>
+        <div className="flex flex-col gap-6 w-full max-w-6xl">
+            <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold text-white">Zarządzanie Kategoriami</h2>
+            </div>
+            <CategoryList
+                categories={categories}
+                budgetStatus={budgetStatus}
+                analytics={analytics}
+            />
         </div>
     )
 }

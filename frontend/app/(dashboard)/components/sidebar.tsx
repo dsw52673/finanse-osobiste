@@ -13,7 +13,7 @@ type SidebarProps = {
     availableFunds: number
     monthlyExpenses: number
     categories: Category[]
-    budgetStatus: BudgetStatusResponse
+    budgetStatus?: BudgetStatusResponse
 }
 
 export default function Sidebar({ availableFunds, monthlyExpenses, categories, budgetStatus }: SidebarProps) {

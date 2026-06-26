@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { ArrowUpRight, ArrowDownLeft } from 'lucide-react'
 import type { Transaction } from '@/lib/api/types'
 
+import { getCleanCategoryName } from '@/lib/category-helpers'
+
 type RecentTransactionsProps = {
     transactions: Transaction[]
 }
@@ -41,7 +43,7 @@ export default function RecentTransactions({ transactions }: RecentTransactionsP
                         const Icon = isIncome ? ArrowUpRight : ArrowDownLeft
                         const iconBg = isIncome ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'
 
-                        const categoryName = transaction.category?.name ?? 'Bez kategorii'
+                        const categoryName = transaction.category?.name ? getCleanCategoryName(transaction.category.name) : 'Bez kategorii'
                         const displayTitle = transaction.description || categoryName
                         const formattedDate = new Date(transaction.date).toLocaleDateString('pl-PL', {
                             day: '2-digit',

@@ -2,25 +2,14 @@
 
 import { useState, useTransition } from 'react'
 import type { Category } from '@/lib/api/types'
+import { getCategoryType } from '@/lib/category-helpers'
 import NumberInput from './number-input'
 import CategorySelect from './category-select'
 
 type TransactionFormProps = {
     categories: Category[]
-    initialData?: {
-        amount: number
-        type: 'INCOME' | 'EXPENSE'
-        categoryId?: number | null
-        description?: string
-        date: string
-    }
-    onSubmit: (data: {
-        amount: number
-        type: 'INCOME' | 'EXPENSE'
-        categoryId: number | null
-        description: string
-        date: string
-    }) => Promise<{ success: boolean; message?: string }>
+    initialData?: { amount: number; type: 'INCOME' | 'EXPENSE'; categoryId?: number | null; description?: string; date: string }
+    onSubmit: (data: { amount: number; type: 'INCOME' | 'EXPENSE'; categoryId: number | null; description: string; date: string }) => Promise<{ success: boolean; message?: string }>
     submitLabel?: string
 }
 
@@ -38,41 +27,24 @@ export default function TransactionForm({
     const [date, setDate] = useState(() => initialData?.date ? new Date(initialData.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0])
     const [error, setError] = useState<string | null>(null)
 
-    const filteredCategories = categories.filter(c => 
-        type === 'EXPENSE'
-            ? ['Inne', 'Jedzenie', 'Paliwo', 'Subskrypcje', 'Czynsz', 'Rozrywka'].includes(c.name)
-            : ['Inne', 'Wynagrodzenie'].includes(c.name)
-    )
+    const filteredCategories = categories.filter(c => getCategoryType(c) === type)
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
         setError(null)
         const trimmedAmount = amount.trim()
-        if (!trimmedAmount) {
-            setError('Podaj kwotę transakcji')
-            return
-        }
+        if (!trimmedAmount) return setError('Podaj kwotę transakcji')
         const parsedAmount = parseFloat(trimmedAmount)
-        if (isNaN(parsedAmount) || parsedAmount <= 0) {
-            setError('Podaj poprawną kwotę większą od zera')
-            return
-        }
-        const decimalParts = trimmedAmount.split('.')
-        if (decimalParts[1] && decimalParts[1].length > 2) {
-            setError('Kwota może mieć maksymalnie dwa miejsca po przecinku')
-            return
-        }
-        if (!date) {
-            setError('Data transakcji jest wymagana')
-            return
-        }
+        if (isNaN(parsedAmount) || parsedAmount <= 0) return setError('Podaj poprawną kwotę większą od zera')
+        if (trimmedAmount.split('.')[1]?.length > 2) return setError('Kwota może mieć maksymalnie dwa miejsca po przecinku')
+        if (!date) return setError('Data transakcji jest wymagana')
+
         let selectedCategoryId = categoryId ? parseInt(categoryId) : null
         if (!selectedCategoryId) {
-            const otherCategory = categories.find(c => c.name === 'Inne')
-            if (otherCategory) {
-                selectedCategoryId = otherCategory.id
-            }
+            const defaultName = type === 'INCOME' ? 'Wynagrodzenie' : 'Inne'
+            selectedCategoryId = categories.find(c => c.name === defaultName)?.id || null
         }
+
         startTransition(async () => {
             const result = await onSubmit({
                 amount: parsedAmount,
@@ -81,9 +53,7 @@ export default function TransactionForm({
                 description: description.trim(),
                 date: new Date(date).toISOString()
             })
-            if (result && !result.success && result.message) {
-                setError(result.message)
-            }
+            if (result && !result.success && result.message) setError(result.message)
         })
     }
 
@@ -94,10 +64,7 @@ export default function TransactionForm({
                 <div className="grid grid-cols-2 gap-2">
                     <button
                         type="button"
-                        onClick={() => {
-                            setType('INCOME')
-                            setCategoryId('')
-                        }}
+                        onClick={() => { setType('INCOME'); setCategoryId('') }}
                         className={`py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
                             type === 'INCOME'
                                 ? 'bg-green-500/20 text-green-400 border border-green-500/45'
@@ -108,10 +75,7 @@ export default function TransactionForm({
                     </button>
                     <button
                         type="button"
-                        onClick={() => {
-                            setType('EXPENSE')
-                            setCategoryId('')
-                        }}
+                        onClick={() => { setType('EXPENSE'); setCategoryId('') }}
                         className={`py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
                             type === 'EXPENSE'
                                 ? 'bg-red-500/20 text-red-400 border border-red-500/45'

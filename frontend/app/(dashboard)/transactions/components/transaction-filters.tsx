@@ -14,6 +14,10 @@ type TransactionFiltersProps = {
     setDateFrom: (value: string) => void
     dateTo: string
     setDateTo: (value: string) => void
+    priceFrom: string
+    setPriceFrom: (value: string) => void
+    priceTo: string
+    setPriceTo: (value: string) => void
     sortBy: string
     setSortBy: (value: string) => void
 }
@@ -28,6 +32,10 @@ export default function TransactionFilters({
     setDateFrom,
     dateTo,
     setDateTo,
+    priceFrom,
+    setPriceFrom,
+    priceTo,
+    setPriceTo,
     sortBy,
     setSortBy
 }: TransactionFiltersProps) {
@@ -54,6 +62,8 @@ export default function TransactionFilters({
         categoryFilter !== 'ALL' ||
         dateFrom !== '' ||
         dateTo !== '' ||
+        priceFrom !== '' ||
+        priceTo !== '' ||
         sortBy !== 'DATE_DESC'
 
     function handleClear() {
@@ -61,12 +71,14 @@ export default function TransactionFilters({
         setCategoryFilter('ALL')
         setDateFrom('')
         setDateTo('')
+        setPriceFrom('')
+        setPriceTo('')
         setSortBy('DATE_DESC')
     }
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-6 lg:grid-cols-6 gap-4 bg-[#161D30]/80 border border-[#202E4C]/30 p-5 rounded-2xl mb-6">
-            <div className="col-span-1 sm:col-span-3 lg:col-span-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-[#161D30]/80 border border-[#202E4C]/30 p-5 rounded-2xl mb-6">
+            <div>
                 <label className="block text-xs font-semibold text-[#94A3B8] mb-1.5">Typ</label>
                 <CustomSelect
                     value={typeFilter}
@@ -74,7 +86,7 @@ export default function TransactionFilters({
                     options={typeOptions}
                 />
             </div>
-            <div className="col-span-1 sm:col-span-3 lg:col-span-1">
+            <div>
                 <label className="block text-xs font-semibold text-[#94A3B8] mb-1.5">Kategoria</label>
                 <CustomSelect
                     value={categoryFilter}
@@ -82,7 +94,7 @@ export default function TransactionFilters({
                     options={categoryOptions}
                 />
             </div>
-            <div className="col-span-1 sm:col-span-2 lg:col-span-1">
+            <div>
                 <label className="block text-xs font-semibold text-[#94A3B8] mb-1.5">Od daty</label>
                 <input
                     type="date"
@@ -92,7 +104,7 @@ export default function TransactionFilters({
                     className="w-full bg-[#0B0F19]/60 border border-[#202E4C]/45 rounded-xl px-3 py-2 text-white outline-none focus:border-[#A3C5FF] transition-colors text-sm cursor-pointer text-left h-[38px]"
                 />
             </div>
-            <div className="col-span-1 sm:col-span-2 lg:col-span-1">
+            <div>
                 <label className="block text-xs font-semibold text-[#94A3B8] mb-1.5">Do daty</label>
                 <input
                     type="date"
@@ -102,7 +114,25 @@ export default function TransactionFilters({
                     className="w-full bg-[#0B0F19]/60 border border-[#202E4C]/45 rounded-xl px-3 py-2 text-white outline-none focus:border-[#A3C5FF] transition-colors text-sm cursor-pointer text-left h-[38px]"
                 />
             </div>
-            <div className="col-span-1 sm:col-span-2 lg:col-span-1">
+            <div>
+                <label className="block text-xs font-semibold text-[#94A3B8] mb-1.5">Kwota od</label>
+                <input
+                    type="number"
+                    value={priceFrom}
+                    onChange={(e) => setPriceFrom(e.target.value)}
+                    className="w-full bg-[#0B0F19]/60 border border-[#202E4C]/45 rounded-xl px-3 py-2 text-white outline-none focus:border-[#A3C5FF] transition-colors text-sm text-left h-[38px]"
+                />
+            </div>
+            <div>
+                <label className="block text-xs font-semibold text-[#94A3B8] mb-1.5">Kwota do</label>
+                <input
+                    type="number"
+                    value={priceTo}
+                    onChange={(e) => setPriceTo(e.target.value)}
+                    className="w-full bg-[#0B0F19]/60 border border-[#202E4C]/45 rounded-xl px-3 py-2 text-white outline-none focus:border-[#A3C5FF] transition-colors text-sm text-left h-[38px]"
+                />
+            </div>
+            <div>
                 <label className="block text-xs font-semibold text-[#94A3B8] mb-1.5">Sortowanie</label>
                 <CustomSelect
                     value={sortBy}
@@ -110,14 +140,14 @@ export default function TransactionFilters({
                     options={sortOptions}
                 />
             </div>
-            <div className="col-span-1 sm:col-span-6 lg:col-span-1 flex flex-col justify-end">
+            <div className="flex flex-col justify-end">
                 <button
                     type="button"
                     disabled={!isFilterActive}
                     onClick={handleClear}
-                    className={`w-full border text-xs font-semibold transition-all h-[38px] flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 ${
+                    className={`w-full border text-xs font-semibold transition-all h-[38px] flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 cursor-pointer ${
                         isFilterActive
-                            ? 'bg-[#202E4C]/40 hover:bg-[#202E4C]/70 border-[#202E4C]/50 text-white cursor-pointer hover:shadow-lg'
+                            ? 'bg-[#202E4C]/40 hover:bg-[#202E4C]/70 border-[#202E4C]/50 text-white hover:shadow-lg'
                             : 'bg-[#202E4C]/10 border-[#202E4C]/20 text-[#94A3B8]/30 cursor-not-allowed'
                     }`}
                 >

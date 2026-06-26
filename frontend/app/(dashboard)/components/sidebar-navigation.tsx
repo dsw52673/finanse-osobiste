@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, User, ArrowLeftRight, Tags, TrendingUp } from 'lucide-react'
+import { LayoutDashboard, User, ArrowLeftRight, Tags, TrendingUp, UploadCloud } from 'lucide-react'
 
 type SidebarNavigationProps = {
     onItemClick?: () => void
@@ -13,7 +13,8 @@ const navigationItems = [
     { name: 'Profil', href: '/profile', icon: User },
     { name: 'Transakcje', href: '/transactions', icon: ArrowLeftRight },
     { name: 'Kategorie', href: '/categories', icon: Tags },
-    { name: 'Analizy', href: '/analytics', icon: TrendingUp }
+    { name: 'Analizy', href: '/analytics', icon: TrendingUp },
+    { name: 'Import danych', href: '/import', icon: UploadCloud }
 ]
 
 export default function SidebarNavigation({ onItemClick }: SidebarNavigationProps) {
@@ -29,11 +30,10 @@ export default function SidebarNavigation({ onItemClick }: SidebarNavigationProp
                         key={item.name}
                         href={item.href}
                         onClick={onItemClick}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-sm font-medium cursor-pointer ${
-                            isActive
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-sm font-medium cursor-pointer ${isActive
                                 ? 'bg-[#242F4D] text-[#E2E8F0] border-l-4 border-[#A3C5FF]'
                                 : 'text-[#94A3B8] hover:bg-[#1E293B] hover:text-[#E2E8F0]'
-                        }`}
+                            }`}
                     >
                         <Icon className="h-5 w-5" />
                         {item.name}

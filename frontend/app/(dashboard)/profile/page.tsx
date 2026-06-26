@@ -1,10 +1,17 @@
+import { ChangeEmailForm } from '../components/change-email-form'
+import { ChangePasswordForm } from '../components/change-password-form'
+
+export const metadata = {
+    title: 'Profil - Finanse Osobiste',
+}
+
 export default function ProfilePage() {
     return (
-        <div className="bg-[#161D30] border border-[#202E4C]/50 rounded-3xl p-8 max-w-2xl">
-            <h2 className="text-xl font-bold text-white mb-4">Mój Profil</h2>
-            <p className="text-sm text-[#94A3B8] leading-relaxed">
-                Widok profilu użytkownika. Ta funkcjonalność zostanie zaimplementowana w kolejnym etapie.
-            </p>
+        <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <ChangeEmailForm />
+                <ChangePasswordForm />
+            </div>
         </div>
     )
 }

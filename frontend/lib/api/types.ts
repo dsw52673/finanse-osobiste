@@ -178,3 +178,13 @@ export type ValidationErrors = {
 export type ApiErrorResponse = {
     error: string | ValidationErrors
 }
+
+export type UpdateEmailInput = {
+    currentPassword: string
+    newEmail: string
+}
+
+export type UpdatePasswordInput = {
+    currentPassword: string
+    newPassword: string
+}

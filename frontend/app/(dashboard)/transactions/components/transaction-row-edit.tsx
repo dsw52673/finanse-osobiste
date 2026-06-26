@@ -2,6 +2,7 @@
 
 import { Check, X } from 'lucide-react'
 import type { Category } from '@/lib/api/types'
+import { getCategoryType, getCleanCategoryName } from '@/lib/category-helpers'
 import CustomSelect from '../../components/custom-select'
 
 import NumberInput from '../../components/number-input'
@@ -50,9 +51,11 @@ export default function TransactionRowEdit({
         { value: 'EXPENSE', label: 'Wydatek' }
     ]
 
+    const filtered = categories.filter((c) => getCategoryType(c) === type)
+
     const categoryOptions = [
         { value: '', label: 'Bez kategorii' },
-        ...categories.map((c) => ({ value: String(c.id), label: c.name }))
+        ...filtered.map((c) => ({ value: String(c.id), label: getCleanCategoryName(c.name) }))
     ]
 
     return (

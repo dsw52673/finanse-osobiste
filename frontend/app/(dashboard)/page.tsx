@@ -18,7 +18,7 @@ export default async function DashboardPage() {
                     <MonthlyOverview transactions={transactions} overallBudget={budgetStatus.overall} />
                 </div>
                 <div className="md:col-span-3 xl:col-span-1 h-full">
-                    <BudgetLimitCard overallBudget={budgetStatus.overall} />
+                    <BudgetLimitCard budgetStatus={budgetStatus} />
                 </div>
                 <div className="md:col-span-2 xl:col-span-1 h-full">
                     <CategoryExpensesCard analytics={analytics} />

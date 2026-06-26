@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { ChevronDown } from 'lucide-react'
 import type { Category } from '@/lib/api/types'
+import { getCleanCategoryName } from '@/lib/category-helpers'
 
 type CategorySelectProps = {
     value: string
@@ -40,7 +41,7 @@ export default function CategorySelect({
                 className="w-full flex items-center justify-between bg-[#0B0F19]/40 border border-[#202E4C]/30 rounded-xl px-4 py-2.5 text-white outline-none focus:border-[#A3C5FF] transition-colors cursor-pointer text-left text-sm"
             >
                 <span className={selectedCategory ? 'text-white' : 'text-[#94A3B8]'}>
-                    {selectedCategory ? selectedCategory.name : placeholder}
+                    {selectedCategory ? getCleanCategoryName(selectedCategory.name) : placeholder}
                 </span>
                 <div className="flex items-center justify-center text-[#A3C5FF] bg-[#202E4C]/40 hover:bg-[#202E4C]/70 rounded-md p-0.5 transition-all h-[24px] w-[26px] cursor-pointer">
                     <ChevronDown className={`h-4 w-4 stroke-[3] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
@@ -73,7 +74,7 @@ export default function CategorySelect({
                                     : 'text-[#E2E8F0] hover:bg-[#202E4C]/40 hover:text-white'
                             }`}
                         >
-                            {category.name}
+                            {getCleanCategoryName(category.name)}
                         </button>
                     ))}
                 </div>

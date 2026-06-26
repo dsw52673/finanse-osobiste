@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, User, ArrowLeftRight, Tags } from 'lucide-react'
+import { LayoutDashboard, User, ArrowLeftRight, Tags, TrendingUp } from 'lucide-react'
 
 type SidebarNavigationProps = {
     onItemClick?: () => void
@@ -12,7 +12,8 @@ const navigationItems = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
     { name: 'Profil', href: '/profile', icon: User },
     { name: 'Transakcje', href: '/transactions', icon: ArrowLeftRight },
-    { name: 'Kategorie', href: '/categories', icon: Tags }
+    { name: 'Kategorie', href: '/categories', icon: Tags },
+    { name: 'Analizy', href: '/analytics', icon: TrendingUp }
 ]
 
 export default function SidebarNavigation({ onItemClick }: SidebarNavigationProps) {
